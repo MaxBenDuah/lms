@@ -33,10 +33,14 @@ function Home() {
     <div>
       <div>
         <MainNav />
-        <h1>Home</h1>
+        <h1>LMS Home</h1>
         <button onClick={() => navigate("/login")}>Login</button>
         <button onClick={() => navigate("/signup")}>Sign up</button>
       </div>
+
+      <h3 style={{ marginTop: "2rem" }}>
+        Enter your details to get holidays for your country
+      </h3>
       <div>
         <form onSubmit={handleSubmit}>
           <input
