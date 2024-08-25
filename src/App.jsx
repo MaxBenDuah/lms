@@ -15,7 +15,7 @@ import AppLayout from "./ui/AppLayout";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
-import { UserContextProvider } from "./contexts/userContext";
+// import { UserContextProvider } from "./contexts/userContext";
 
 const router = createBrowserRouter([
   {
@@ -74,14 +74,12 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <UserContextProvider>
-      <PrimeReactProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools initialIsOpen={false} />
-          <RouterProvider router={router} />
-        </QueryClientProvider>
-      </PrimeReactProvider>
-    </UserContextProvider>
+    <PrimeReactProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <RouterProvider router={router} />
+      </QueryClientProvider>
+    </PrimeReactProvider>
   );
 }
 

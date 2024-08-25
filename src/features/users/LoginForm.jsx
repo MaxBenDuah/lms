@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "./useLogin";
 import { useEffect, useState } from "react";
 import { useGetCurrentUser } from "./useGetCurrentUser";
-import { useUserDataContext } from "../../contexts/userContext";
+// import { useUserDataContext } from "../../contexts/userContext";
 
 function LoginForm() {
   const [email, setEmail] = useState("john.doe@example.com");
@@ -11,7 +11,7 @@ function LoginForm() {
 
   const { mutate: login, isPending, isError, error } = useLogin();
   const navigate = useNavigate();
-  const { dispatch } = useUserDataContext();
+  // const { dispatch } = useUserDataContext();
 
   const {
     profile,
@@ -22,14 +22,14 @@ function LoginForm() {
   // console.log(profile);
   // console.log(profile);
 
-  useEffect(
-    function () {
-      if (profile) {
-        dispatch({ type: "addCurrentUser", payload: profile });
-      }
-    },
-    [dispatch, profile]
-  );
+  // useEffect(
+  //   function () {
+  //     if (profile) {
+  //       dispatch({ type: "addCurrentUser", payload: profile });
+  //     }
+  //   },
+  //   [dispatch, profile]
+  // );
 
   useEffect(
     function () {
