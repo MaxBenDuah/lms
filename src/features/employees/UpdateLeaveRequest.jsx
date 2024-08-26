@@ -4,7 +4,7 @@ import { useUpdateLeaveRequest } from "./useUpdateLeaveRequest";
 import { useSearchParams } from "react-router-dom";
 
 function UpdateLeaveRequest({ setEditId }) {
-  const [createdAt, setCreatedAt] = useState("");
+  // const [createdAt, setCreatedAt] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectLeaveType, setSelectLeaveType] = useState("Casual Leave");
@@ -31,7 +31,7 @@ function UpdateLeaveRequest({ setEditId }) {
         setSelectLeaveType(data.leave_type);
         setEndDate(data.end_date);
         setStartDate(data.start_date);
-        setCreatedAt(data.created_at);
+        // setCreatedAt(data.created_at);
       }
     },
     [data]
@@ -52,7 +52,7 @@ function UpdateLeaveRequest({ setEditId }) {
     updateLeaveRequest(
       {
         id: editId,
-        created_at: createdAt,
+        // created_at: createdAt,
         leave_type: selectLeaveType,
         start_date: startDate,
         end_date: endDate,
@@ -79,11 +79,11 @@ function UpdateLeaveRequest({ setEditId }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
+      {/* <input
         type="date"
         value={createdAt}
         onChange={(e) => setCreatedAt(e.target.value)}
-      />
+      /> */}
       <input
         type="date"
         value={startDate}

@@ -62,19 +62,23 @@ export async function createEmployee(newEmployee) {
 export async function createLeaveRequest(leaveRequest) {
   const { employee_id, start_date, end_date } = leaveRequest;
 
+  // old code
+  // .from("leave_request")
+  // .select("*")
+  // .eq("employee_id", employee_id)
+  // .or(`start_date.lte.${end_date},end_date.gte.${start_date}`);
   // Step 1: Check for overlapping leave requests
+  // const { data: existingLeaves, error: overlapError } = await supabase
+  //   .from("leave_request")
+  //   .select("id, start_date, end_date")
+  //   .eq("employee_id", employee_id)
+  //   .gte("start_date", start_date)
+  //   .lte("end_date", end_date)
+  //   .or(`and(start_date.lte.${end_date}, end_date.gte.${start_date})`);
   const { data: existingLeaves, error: overlapError } = await supabase
-    // old coce
-    // .from("leave_request")
-    // .select("*")
-    // .eq("employee_id", employee_id)
-    // .or(`start_date.lte.${end_date},end_date.gte.${start_date}`);
-
     .from("leave_request")
     .select("id, start_date, end_date")
     .eq("employee_id", employee_id)
-    .gte("start_date", start_date)
-    .lte("end_date", end_date)
     .or(`and(start_date.lte.${end_date}, end_date.gte.${start_date})`);
 
   if (overlapError) {

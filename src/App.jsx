@@ -66,6 +66,8 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 10000,
+      // if I want the leave request to be automatically refetched for employees once it's approved, the the staleTime should be set to 0 and the refetchOnWindowFocus should also be set to true
+      // staleTime: 0,
       gcTime: 5 * 60 * 100000,
       refetchOnWindowFocus: false,
     },
