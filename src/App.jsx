@@ -17,6 +17,7 @@ import EmployeeDashboard from "./pages/EmployeeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import Account from "./features/users/Account";
 import { UserContextProvider } from "./contexts/UserContext";
+import ForgotPasswordForm from "./features/users/ForgotPasswordForm";
 // import { UserContextProvider } from "./contexts/UserContext";
 
 const router = createBrowserRouter([
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
   {
     path: "signup",
     element: <SignUpForm />,
+  },
+  {
+    path: "forgot-password",
+    element: <ForgotPasswordForm />,
   },
 ]);
 

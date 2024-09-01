@@ -101,6 +101,7 @@ function LoginForm() {
           {isPending ? `Loging in` : `Login`}
         </button>
       </form>
+      <Link to="/forgot-password">Forgot Password?</Link>
       <p>
         Don&apos;t have an account. <Link to="/signup">Sign up</Link>
       </p>

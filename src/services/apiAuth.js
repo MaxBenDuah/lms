@@ -129,9 +129,13 @@ export async function updateCurrentUser({ password, updateName, avatar }) {
   return updatedUser;
 }
 
-// Created this for test - I don't need this anymore and I will be deleting the corresponding custom hook that fetches it.
-// export async function getCurrentLoggedUser() {
-//   const { data } = await supabase.auth.getUser();
+export async function forgotPassword({ email }) {
+  let { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
-//   return data;
-// }
+  if (error)
+    throw new Error(
+      `There was a problem resetting password - ${error.message}`
+    );
+
+  return data;
+}
