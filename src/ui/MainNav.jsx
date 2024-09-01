@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function MainNav() {
   return (
-    <nav>
+    <nav className="flex justify-content-around">
       <ul>
         <li>
           <Link to="/">Home</Link>

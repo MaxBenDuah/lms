@@ -28,6 +28,7 @@ export async function getEmployee(user) {
   return data;
 }
 
+// I don't need this function anymore because I don't plan on creating an employee as their details are taken when they sign up. However, i want to upload their image and update employees data, so I will do that below
 export async function createEmployee(newEmployee) {
   // const { data, error } = await supabase
   //   .from("employees")

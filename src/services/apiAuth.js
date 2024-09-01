@@ -1,4 +1,4 @@
-import supabase from "./supabase";
+import supabase, { supabaseUrl } from "./supabase";
 
 export async function signUpUser({
   email,
@@ -6,12 +6,21 @@ export async function signUpUser({
   role,
   name,
   department,
-  leave_balance,
+  // leave_balance, - i don't need this because i'm setting a default value for it
   status,
 }) {
   let { data, error } = await supabase.auth.signUp({
     email,
     password,
+    options: {
+      data: {
+        name,
+        department,
+        status,
+        role,
+        avatar: "",
+      },
+    },
   });
 
   if (error) {
@@ -22,7 +31,7 @@ export async function signUpUser({
     // If sign-up is successful, insert the user details into the employees table
     const { error: insertError } = await supabase
       .from("employees")
-      .insert([{ email, role, name, department, leave_balance, status }]);
+      .insert([{ email, role, name, department, status }]);
 
     if (insertError) {
       console.error(
@@ -67,3 +76,62 @@ export async function userLogout() {
   if (error)
     throw new Error(`There was a problem loging out - ${error.message}`);
 }
+
+export async function updateCurrentUser({ password, updateName, avatar }) {
+  // console.log(updateName, avatar, avatar.name);
+  // 1. Update Password OR Name
+  let updateData = {};
+
+  if (password) updateData = { password };
+
+  // if (updateName) updateData = { date: { name: updateName } }; previous. i just realised there was a typo, it should have been data not date above, lol... this was giving me the error!
+  if (updateName) updateData.data = { name: updateName };
+
+  const { data, error } = await supabase.auth.updateUser(updateData);
+  // console.log(data);
+
+  if (error)
+    throw new Error(
+      `There was a problem updating the user data - ${error.message}`
+    );
+
+  if (!avatar) return data;
+
+  // 2. Upload the avatar image
+  const fileName = `avatar-${data.user.id}-${Math.random()}`;
+
+  const { error: storageError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, avatar);
+
+  if (storageError)
+    throw new Error(
+      `There was a problem uploading the avatar - ${storageError.message}`
+    );
+
+  // 3. Update avatar in the user
+
+  // https://unjfpbxmseuokgzzqbko.supabase.co/storage/v1/object/public/avatars/avatar-7285335e-a068-410b-bbcf-c124a748ee60-0.6420373753115627
+
+  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
+
+  // console.log(updatedUser);
+
+  if (error2)
+    throw new Error(
+      `There was a problem updating the user avatar - ${error2.message}`
+    );
+
+  return updatedUser;
+}
+
+// Created this for test - I don't need this anymore and I will be deleting the corresponding custom hook that fetches it.
+// export async function getCurrentLoggedUser() {
+//   const { data } = await supabase.auth.getUser();
+
+//   return data;
+// }
