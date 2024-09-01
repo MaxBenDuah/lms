@@ -8,7 +8,7 @@ function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Employee");
-  const [status, setStatus] = useState("active");
+  // const [status, setStatus] = useState("active");
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ function SignUpForm() {
         role,
         name: fullName,
         department,
-        status,
+        // status,
       },
       {
         onSuccess: () => {
@@ -77,11 +77,11 @@ function SignUpForm() {
           <option value="Employee">Employee</option>
           <option value="Manager">Manager</option>
         </select>
-        <br />
-        <select value={status} onChange={(e) => setStatus(e.target.value)}>
+        {/* I don't need this */}
+        {/* <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
-        </select>
+        </select> */}
         <br />
         <button type="submit">Sign up</button>
       </form>

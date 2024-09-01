@@ -7,7 +7,7 @@ export async function signUpUser({
   name,
   department,
   // leave_balance, - i don't need this because i'm setting a default value for it
-  status,
+  // status,
 }) {
   let { data, error } = await supabase.auth.signUp({
     email,
@@ -16,7 +16,7 @@ export async function signUpUser({
       data: {
         name,
         department,
-        status,
+        // status,
         role,
         avatar: "",
       },
