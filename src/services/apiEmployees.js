@@ -101,6 +101,26 @@ export async function createLeaveRequest(leaveRequest) {
 
   if (error) throw new Error(`Leave was not created - ${error.message}`);
 
+  // Step 3: Create a notification for the leave request creation
+  const notificationMessage = `New leave request submitted by employee ID ${employee_id}`;
+
+  // Insert notification into the notifications table
+  const { error: notificationError } = await supabase
+    .from("notifications")
+    .insert([
+      {
+        employee_id,
+        leave_request_id: data[0].id, // assuming the data returned is an array with the inserted leave request
+        message: notificationMessage,
+        is_read: false,
+      },
+    ]);
+
+  if (notificationError)
+    throw new Error(
+      `There was a problem creating this notification - ${notificationError.message}`
+    );
+
   return data;
 }
 
@@ -301,4 +321,43 @@ export async function updateLeaveRequestByManager(statusAndIdObj) {
   }
 
   return data;
+}
+
+export async function getNotifications(employee_id) {
+  let { data, error } = await supabase
+    .from("notifications")
+    .select("*")
+    .eq("employee_id", employee_id)
+    .order("created_at", { ascending: false });
+
+  if (error)
+    throw new Error(
+      `There was an eror getting notification - ${error.message}`
+    );
+
+  return data;
+}
+
+export async function markNotificationAsRead(notificationId) {
+  const { data, error } = await supabase
+    .from("notifications")
+    .update({ is_read: true })
+    .eq("id", notificationId)
+    .select();
+
+  if (error)
+    throw new Error(
+      `There was an changing notification status - ${error.message}`
+    );
+
+  return data;
+}
+
+export async function deleteNotification(id) {
+  const { error } = await supabase.from("notifications").delete().eq("id", id);
+
+  if (error)
+    throw new Error(
+      `There was a problem deleting notification - ${error.message}`
+    );
 }

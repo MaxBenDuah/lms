@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 // import { useGetEmployees } from "../features/employees/useGetEmployess";
 // import Dialog from "../ui/DialogPopup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DialogPopup from "../ui/DialogPopup";
 import LeaveRequests from "../features/employees/LeaveRequests";
 // import { useGetCurrentUser } from "../features/users/useGetCurrentUser";
@@ -9,7 +9,7 @@ import { useUser } from "../features/users/useUser";
 import { useGetEmployee } from "../features/employees/useGetEmployee";
 import { useLogout } from "../features/users/useLogout";
 // import UpdateUserDataForm from "../features/users/updateUserDataForm";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 // import { useLoggedInUser } from "../features/users/useLoggedInUser";
 // import { useUserDataContext } from "../contexts/userContext";
 
@@ -21,6 +21,7 @@ function EmployeeDashboard() {
   // const { employee, isLoading, isError, error } = useGetEmployees();
   // const { data } = useGetCurrentUser();
   // const [avatar, setAvatar] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // const {
   //   data: loggedIn,
@@ -37,12 +38,24 @@ function EmployeeDashboard() {
   // console.log(user);
   // I don't need  the below because now when the user logs in, I dispatch the profile to the context. So check and fix later
   const { data, isLoading, isError, error } = useGetEmployee(user);
+
   const {
     mutate: logout,
     isPending,
     isError: isError2,
     error: error2,
   } = useLogout();
+
+  // Placed the employee_id in the url so I can use it to get the notifications
+  useEffect(
+    function () {
+      if (data?.id) {
+        searchParams.set("employee_id", data.id);
+        setSearchParams(searchParams);
+      }
+    },
+    [data?.id, searchParams, setSearchParams]
+  );
 
   // useEffect(
   //   function () {
@@ -65,7 +78,9 @@ function EmployeeDashboard() {
 
   // I don't need this name variable because i am getting the name from the useUser hook above which gives me the name so I am deleting it from the below
   const { status, email, role, department, leave_balance } = data;
-  // console.log(data);
+  // console.log(id);
+  // searchParams.set("employee_id", id);
+  // setSearchParams(searchParams);
 
   // const {
   //   user: {

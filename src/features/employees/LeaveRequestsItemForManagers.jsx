@@ -3,8 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import { convertDate } from "../../utils/helpers";
 import { useGetEmployeeName } from "./useGetEmployeeName";
 import { useUpdateLeaveRequestByManager } from "./useUpdateLeaveRequestByManager";
+import supabase from "../../services/supabase";
 
-function LeaveRequestsItemForManagers({ leave }) {
+function LeaveRequestsItemForManagers({ leave, data: managersData }) {
   const [searchParams, setSearchParams] = useSearchParams();
   // const [leaveStatus, setLeaveStatus] = useState(leave.status);
 
@@ -41,7 +42,7 @@ function LeaveRequestsItemForManagers({ leave }) {
 
   const { name } = data;
 
-  // console.log(data);
+  // console.log(managersData);
 
   function handleUpdate(e) {
     const value = e.target.value;
@@ -49,7 +50,34 @@ function LeaveRequestsItemForManagers({ leave }) {
 
     if (!value) return;
 
-    updateLeaveRequest({ value, id });
+    updateLeaveRequest(
+      { value, id },
+      {
+        onSuccess: async () => {
+          // Create notification for the employee
+          const notificationMessageForEmployee = `Your leave request has been ${value}.`;
+          await supabase.from("notifications").insert([
+            {
+              employee_id,
+              leave_request_id: id,
+              message: notificationMessageForEmployee,
+              is_read: false,
+            },
+          ]);
+
+          // Create notification for the manager
+          const notificationMessageForManager = `You have ${value.toLowerCase()} a leave request.`;
+          await supabase.from("notifications").insert([
+            {
+              employee_id: managersData.id,
+              leave_request_id: id,
+              message: notificationMessageForManager,
+              is_read: false,
+            },
+          ]);
+        },
+      }
+    );
     searchParams.set("updateId", employee_id);
     setSearchParams(searchParams);
   }

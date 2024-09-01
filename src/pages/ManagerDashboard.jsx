@@ -1,11 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import LeaveRequestsItemForManagers from "../features/employees/LeaveRequestsItemForManagers";
 import { useGetAllLeaveRequest } from "../features/employees/useGetAllLeaveRequest";
 import { useGetEmployee } from "../features/employees/useGetEmployee";
 import { useLogout } from "../features/users/useLogout";
 import { useUser } from "../features/users/useUser";
+import { useEffect } from "react";
 
 function ManagerDashboard() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useUser();
   const { data, isLoading, isError, error } = useGetEmployee(user);
   const {
@@ -21,6 +23,16 @@ function ManagerDashboard() {
     error: error3,
   } = useGetAllLeaveRequest();
   const navigate = useNavigate();
+
+  useEffect(
+    function () {
+      if (data) {
+        searchParams.set("employee_id", data.id);
+        setSearchParams(searchParams);
+      }
+    },
+    [data, searchParams, setSearchParams]
+  );
 
   if (isLoading) return <p>Loading...</p>;
 
@@ -38,7 +50,8 @@ function ManagerDashboard() {
   const {
     user_metadata: { name: metaDataName },
   } = user;
-  console.log(user);
+  // console.log(user);
+  // console.log(data);
 
   return (
     <div>
@@ -56,7 +69,11 @@ function ManagerDashboard() {
       <p>Department - {department}</p>
       <ul>
         {allLeaveRequest.map((leave) => (
-          <LeaveRequestsItemForManagers key={leave.id} leave={leave} />
+          <LeaveRequestsItemForManagers
+            key={leave.id}
+            leave={leave}
+            data={data}
+          />
         ))}
       </ul>
     </div>
