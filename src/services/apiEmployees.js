@@ -139,6 +139,7 @@ export async function getLeaveRequest(id) {
 }
 
 export async function deleteLeaveRequest(id) {
+  // console.log(id);
   const { error } = await supabase.from("leave_request").delete().eq("id", id);
 
   if (error)

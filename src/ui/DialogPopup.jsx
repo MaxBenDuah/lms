@@ -16,7 +16,7 @@ function DialogPopup({ setVisible, data }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectLeaveType, setSelectLeaveType] = useState("Casual Leave");
-  const [selectStatus, setSelectStatus] = useState("Pending");
+  const [selectStatus] = useState("Pending"); //I don't need the setSelectStatus
   const [reason, setReason] = useState("");
   const {
     mutate: createNewLeaveRequest,
@@ -66,7 +66,7 @@ function DialogPopup({ setVisible, data }) {
     );
   }
 
-  const status = ["Pending", "Approved", "Rejected"];
+  // const status = ["Pending", "Approved", "Rejected"];- previous, i have removed "Approved", and "Rejected" because it's not needed. And there's no need to put this in an array since it's just one option
 
   // const headerElement = (
   //   <div className="text-center">
@@ -121,14 +121,15 @@ function DialogPopup({ setVisible, data }) {
             <option key={type}>{type}</option>
           ))}
         </select>
-        <select
+        <input type="text" value={selectStatus} disabled />
+        {/* <select
           value={selectStatus}
           onChange={(e) => setSelectStatus(e.target.value)}
         >
           {status.map((type) => (
             <option key={type}>{type}</option>
           ))}
-        </select>
+        </select> */}
         <textarea value={reason} onChange={(e) => setReason(e.target.value)} />
         <button type="submit">Submit</button>
         <button onClick={() => setVisible(false)}>Cancel</button>
